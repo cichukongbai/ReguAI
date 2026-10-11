@@ -1,0 +1,25 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: reguai-app
+  datasource:
+    url: jdbc:postgresql://localhost:5432/reguai
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+# 注意：mybatis-plus 是独立的顶层配置节点，不能嵌在 spring 下面，
+# 否则整段配置都会被 Spring Boot 忽略（此前就踩了这个坑）。
+mybatis-plus:
+  configuration:
+    # 自动映射 institution_code 到 institutionCode。
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath*:/mapper/**/*.xml
+  # 注册 UUID 类型处理器，支撑 PostgreSQL uuid 列 <-> java.util.UUID。
+  type-handlers-package: com.reguai.business.typehandler
+  global-config:
+    db-config:
+      # 设置默认主键策略；具体表仍应以 schema.sql 中的主键定义为准。
+      id-type: auto
